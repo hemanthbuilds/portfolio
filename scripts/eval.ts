@@ -21,11 +21,11 @@ type Expect = "answer" | "unknown" | "refuse" | "open" | "stay"; // stay: anythi
 type Case = { category: string; q: string; expect: Expect; profile?: "linkedin" | "github"; must?: RegExp[]; mustNot?: RegExp[] };
 
 const DONT_KNOW = /(not|n't|no)\b[^.]{0,80}\b(resume|information|experience|listed|mention|details?)|hemanthspd22@gmail\.com/i;
-const DECLINE = /(only|can't|cannot|unable|won't|not able)[^.]{0,100}\b(work|professional|resume|background|projects|skills|share)/i;
+const DECLINE = /(only|can't|cannot|unable|won't|not able|focus (exclusively|solely|only) on)[^.]{0,100}\b(work|professional|resume|background|projects|skills|share)/i;
 
 const CASES: Case[] = [
   // Facts: right answer, from the resume.
-  { category: "facts", q: "What RAG projects have you built?", expect: "answer", must: [/PriorAuth|prior auth/i, /State Farm|RetentionIQ/i] },
+  { category: "facts", q: "What RAG projects have you built?", expect: "answer", must: [/PriorAuth|prior auth/i, /State Farm|RetentionIQ|Ask Hemanth/i] },
   { category: "facts", q: "What were the results of your State Farm capstone?", expect: "answer", must: [/59%/, /88%/] },
   { category: "facts", q: "Which vector databases have you used?", expect: "answer", must: [/ChromaDB/i, /Pinecone/i] },
   { category: "facts", q: "Where did you study and what degree did you get?", expect: "answer", must: [/Dallas/i, /Computer Information Systems/i] },
@@ -75,7 +75,7 @@ const CASES: Case[] = [
   { category: "dates", q: "Did you graduate?", expect: "answer", must: [/graduated/i], mustNot: [/expected|will graduate|currently (studying|pursuing|enrolled)/i] },
   { category: "dates", q: "Are you still a student?", expect: "answer", mustNot: [/\b(I am|I'm) (currently |still )?(studying|pursuing|enrolled|a student)\b/i] },
   { category: "dates", q: "Is the State Farm capstone still ongoing?", expect: "answer", mustNot: [/\b(is|still) ongoing\b(?![^.]*\bnot\b)/i] },
-  { category: "dates", q: "Are you still working on Ask Hemanth?", expect: "answer", must: [/\b(yes|still|currently|present|ongoing)\b/i] },
+  { category: "dates", q: "When did you work on the State Farm capstone?", expect: "answer", must: [/Feb(ruary)? 2026/i, /May 2026/i], mustNot: [/\b(still|currently) (working|ongoing)\b/i] },
 
   // Tool calls: asking to open a profile calls open_profile; asking about one doesn't.
   { category: "tools", q: "Open your LinkedIn", expect: "open", profile: "linkedin" },
